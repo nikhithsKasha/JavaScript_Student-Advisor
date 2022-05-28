@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Adviser</title>
+    <link rel="stylesheet" href="./main.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <!-- https://www.sscodeply.com/p/xxJ7fUOhLOy9 -->
+    <div class="offcanvas offcanvas-end w-25" tabindex="-1" id="offcanvas" data-bs-keyboard="false" data-bs-backdrop="false">
+        <div class="offcanvas-header">
+            <h6 class="offcanvas-title d-none d-sm-block" id="offcanvas">Uploaded File Schema</h6>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <hr>
+        <div class="offcanvas-body px-0">
+            <pre id="schema-content" class="p-2"></pre>
+        </div>
+    </div>
+    <!-- NAVBAR -->
+    <nav class="navbar  navbar-dark bg-dark">
+        <a class="navbar-brand px-2" href="#">Student Adviser</a>
+        <ul class="nav nav-pills d-none d-md-flex">
+            <li class="nav-item">
+                <a class="nav-link text-light" href="#cgpa">Courses Status</a>
+            </li>
+            <li>
+                <a class="nav-link text-light" data-bs-toggle="offcanvas" data-bs-target="#offcanvas" role="button">
+                     Schema
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <div class="container-fluid mt-4">
+        <div class="col-8">
+            <!-- FILE UPLOAD SECTION -->
+            <label class="form-label" for="customFile">Upload Schema</label>
+            <input type="file" class="form-control" id="customFile" onchange="onFileupload()" />
+            <small id="show-text"></small>
+        </div>
+
+        <br>
+        <hr>
+        <!-- FORM FILL SECTION -->
+        <div class="row">
+            <div class="col-md-8 col-sm-12">
+                <div class="row  mt-4">
+                    <div class="col-md-3 col-sm-12">
+                        <label for="grade" class="form-label">Term Start</label>
+        
+                        <select id="start-term" onchange="reArrange()" class="form-select">
+                            <option value="">
+                                Select Start term
+                            </option>
+                        </select>
+                        <small>The term that your course starts</small>
+                    </div>
+                    <div class="col-md-3 col-sm-12">
+                        <label for="grade" class="form-label">Course Start Year</label>
+        
+                        <select id="start-year" onchange="reArrange()" class="form-select">
+                            <option value="">
+                                Select Start year
+                            </option>
+                        </select>
+                        <small>The year that your course starts</small>
+                    </div>
+                </div>
+                <br>
+                <div class="row align-items-center">
+                    <div class="col-md-3 col-sm-12">
+                        <label for="grade" class="form-label">Available Courses </label>
+        
+                        <select id="course" onchange="setTerm()" class="form-select">
+                            <option value="">
+                                Select Course
+                            </option>
+                        </select>
+                        <small>These the courses available for you</small>
+                    </div>
+                    <div class="col-md-3 col-sm-12">
+                        <label style="opacity: 0;" class="form-label">--</label>
+                        <span> Credit Hours <strong id="credit-hours"></strong></span>
+                    </div>
+                    <div class="col-md-3 col-sm-12">
+                        <label for="grade" class="form-label">Semester</label>
+                        <select id="term" class="form-select">
+                            <option>
+                                Select Term
+                            </option>
+                        </select>
+                        <small>Th semester in which you take the course</small>
+                    </div>
+                    <div class="col-md-3 col-sm-12">
+                        <label for="grade" class="form-label">Grade</label>
+                        <select id="grade" class="form-select">
+                            <option value="">
+                                Select Grade
+                            </option>
+                        </select>
+                        <small>Select the grade obtained in this semester</small>
+                    </div>
+                </div>
+                <br>
+                <br>
+                <div class="row justify-content-between ">
+                    <div class="col-4 ">
+                        <button id="update-course" class="btn btn-success" onclick="downloadSchema()">
+                            &#8675; Download Schema
+                        </button>
+                    </div>
+        
+                    <div class="col-4"></div>
+                    <div class="col-4 align-self-end">
+                        <button id="update-course" class="btn btn-primary" onclick="onUpdate()">Update</button>
+                    </div>
+                    <!-- <div class="col-3"></div> -->
+                </div>
+            </div>
+
+            <div class="col-md-4 col-sm-12 align-items-center mt-4">
+                <div class="row justify-content-center px-2">
+                    <div class="card text-center col-6" style="padding: 0;">
+                        <div class="card-header bg-dark text-light" ata-bs-toggle="tooltip" data-bs-placement="right" title="
+                        Cumulative Grade point average">
+                            CGPA
+                        </div>
+                        <h4 id="cgpa" class="p-4"></h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <br>
+
+        <!-- CGPA -->
+        <br>
+        <hr>
+        <!-- OVERVIEW -->
+        <div class="row px-4">
+            <div class="col-md-6 col-sm-12">
+                <h5>Completed Courses</h5>
+                <table class="table ">
+                    <thead>
+                        <tr class="table-success">
+                            <th>Course</th>
+                            <th>Completed On</th>
+                            <th>Grade</th>
+                        </tr>
+                    </thead>
+                    <tbody id="completed-courses"> </tbody>
+                </table>
+            </div>
+            <div class="col-md-6 col-sm-12">
+                <h5>Pending Courses</h5>
+                <table class="table ">
+                    <thead>
+                        <tr class="table-warning">
+                            <th>Course</th>
+                            <th>Prerequisite Course(s)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pending-courses"></tbody>
+                </table>
+            </div>
+        </div>
+        <!-- <div id="schema" class="card">
+            <div class="card-header bg-dark ">
+                <h5 class="text-light">Schema</h5>
+            </div>
+            <pre id="schema-content" class="p-2">
+            </pre>
+        </div> -->
+        <button onclick="topFunction()" class="bg-dark text-light" id="scrollTop" title="Go to top">&#8593</button>
+        <script src="./index.js"></script>
+    </div>
+</body>
+
+</html>
